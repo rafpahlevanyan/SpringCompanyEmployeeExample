@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
@@ -7,7 +7,14 @@
 <body>
 
 
-<a href="/companies">Company</a>
+<a href="?lang=hy">Hy</a>
+<a href="?lang=en">En</a>
+<a href="?lang=ru">Ru</a>
+<br>
+<br>
+<br>
+
+<a href="/companies" th:text="#{main.view.all.employees}">View all Companies</a>
 <a href="/employees">Employee</a>
 
 </body>
