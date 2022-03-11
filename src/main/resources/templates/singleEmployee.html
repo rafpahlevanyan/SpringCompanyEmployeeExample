@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee</title>
+</head>
+<style>
+    ul{
+        list-style: none;
+        float: left;
+    }
+    ul li {
+     display: inline-block;
+        float: left;
+        padding: 30px;
+    }
+</style>
+<body>
+
+
+
+<a href="/employees">Նախորդ էջ</a>
+<br>
+<br>
+<br>
+
+
+
+<div>
+    <!--        th:href="@{/'items' + ${item.id}}-->
+        <div style="float: left">
+            <div>
+                <img th:if="${employee.employeeImages  == null || employee.employeeImages.isEmpty()}" src="/pic/image-not-found.jpg" width="80px">
+                <ul th:if="${employee.employeeImages != null && !employee.employeeImages.isEmpty()}">
+                    <li th:each="image: ${employee.employeeImages}"> <img  th:src="@{/getImage(picName=${image.name})}"
+                             width="300px">
+
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <span th:text="${employee.getEmail()}">
+                </span><br>
+                <span th:text="${employee.phone}"></span><br><br>
+
+                <span th:each="language: ${employee.languages}" th:text="${language.name + ' '}"></span><br><br>
+            </div>
+            Company Info:
+            <div>
+                <span th:text="${employee.company.name + ' ' + employee.company.address}">
+                </span>
+            </div>
+
+        </div>
+
+</div>
+
+
+
+</body>
+</html>

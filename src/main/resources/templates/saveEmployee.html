@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Employee</title>
+</head>
+<body>
+
+
+<form action="/employees/add" method="post" enctype="multipart/form-data">
+
+
+  <input th:if="${employee != null}" type="hidden" th:value="${employee.id}" name="id">
+  name:<input type="text" name="name" th:value="${employee == null} ? '' : ${employee.name} " placeholder="name"/><br>
+  surname:<input type="text" name="surname" th:value="${employee== null} ? '' : ${employee.surname} " placeholder="surname"/><br>
+  email:<input type="email" name="email" th:value="${employee== null} ? '' : ${employee.email} " placeholder="email"/><br>
+  phone:<input type="text" name="phone" th:value="${employee== null} ? '' : ${employee.phone} " placeholder="phone"/><br>
+  salary:<input type="text" name="salary" th:value="${employee== null} ? '' : ${employee.salary} " placeholder="salary"/><br>
+  position:<input type="text" name="position" th:value="${employee== null} ? '' : ${employee.position} " placeholder="position"/><br>
+  Companies:
+  <select name="companyId">
+    <option th:each="company : ${companies}" th:text="${company.name}" th:value="${company.id}"></option>
+  </select><br>
+  Languages:
+  <select name="languages[]" multiple>
+    <option th:each="lang: ${languages}" th:text="${lang.name}" th:value="${lang.id}"></option>
+  </select><br>
+  Pictures:<input type="file" name="pictures" multiple><br>
+
+  <input type="submit" value="Add"><br>
+</form>
+</body>
+</html>

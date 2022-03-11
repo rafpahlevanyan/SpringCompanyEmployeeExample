@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    tr th{
+        margin: 20px;
+        padding: 20px;
+    }
+    tr td{
+        margin: 20px;
+        padding: 25px;
+    }
+</style>
+<body>
+
+<a href="/">Home Page</a>
+
+<table>
+<!--    <thead>-->
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Salary</th>
+        <th>Position</th>
+        <th>Company</th>
+        <th>Language</th>
+        <th>ProfPic</th>
+    </tr>
+
+<!--    </thead>-->
+
+<!--    <tbody>-->
+
+    <tr th:each="employee: ${employees}">
+
+        <td th:text="${employee.id}">
+        </td>
+
+        <td><a th:href="@{'/employees/' + ${employee.id}}"><span th:text="${employee.name}"> </span></a></td>
+
+        <td th:text="${employee.surname}"></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.phone}"></td>
+        <td th:text="${employee.salary}"></td>
+        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.company.name}"></td>
+        <td style="display: inline-block; width: 10px;margin: 25px;padding: 0" th:each="language: ${employee.languages}" th:text="${language.name}"></td>
+        <td>
+            <img th:if="${employee.employeeImages != null && !employee.employeeImages.isEmpty()}"
+                 th:src="@{/getImage(picName=${employee.employeeImages.get(0).name})}"
+                 width="80px">
+            <img th:if="${employee.employeeImages  == null || employee.employeeImages.isEmpty()}"
+                 src="/pic/image-not-found.jpg" width="80px">
+        </td>
+
+    </tr>
+<!--    </tbody>-->
+</table>
+
+<a href="/employees/add">Add Employee</a>
+
+
+</body>
+</html>
