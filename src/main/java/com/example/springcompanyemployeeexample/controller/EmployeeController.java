@@ -3,15 +3,11 @@ package com.example.springcompanyemployeeexample.controller;
 import com.example.springcompanyemployeeexample.dto.CreateEmployeeRequest;
 import com.example.springcompanyemployeeexample.entity.Company;
 import com.example.springcompanyemployeeexample.entity.Employee;
-import com.example.springcompanyemployeeexample.entity.EmployeeImage;
-import com.example.springcompanyemployeeexample.entity.Language;
-import com.example.springcompanyemployeeexample.repository.CompanyRepository;
-import com.example.springcompanyemployeeexample.repository.EmployeeImageRepository;
-import com.example.springcompanyemployeeexample.repository.EmployeeRepository;
-
-import com.example.springcompanyemployeeexample.repository.LanguageRepository;
+import com.example.springcompanyemployeeexample.service.CompanyService;
+import com.example.springcompanyemployeeexample.service.EmployeeService;
+import com.example.springcompanyemployeeexample.service.LanguageService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -19,25 +15,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class EmployeeController {
 
+    private final EmployeeService employeeService;
+    private final CompanyService companyService;
+    private final LanguageService languageService;
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private LanguageRepository languageRepository;
-    @Autowired
-    private EmployeeImageRepository employeeImageRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
 
     @Value("${companyemployee.upload.path}")
     private String imgPath;
@@ -45,7 +35,7 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public String employeePage(ModelMap map) {
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeService.findAll();
         map.addAttribute("employees", employees);
         return "employees";
     }
@@ -58,60 +48,33 @@ public class EmployeeController {
 
     @GetMapping("/employees/byCompanies/{id}")
     public String employeesByCompaniesPage(ModelMap map, @PathVariable("id") int id) {
-        Company company = companyRepository.getById(id);
-        List<Employee> employees = employeeRepository.findAllByCompany(company);
+        Company company = companyService.getById(id);
+        List<Employee> employees = employeeService.findAllByCompany(company);
         map.addAttribute("employees", employees);
         return "employees";
     }
 
     @GetMapping("/employees/add")
     public String addEmployeePage(ModelMap map) {
-        map.addAttribute("companies", companyRepository.findAll());
-        map.addAttribute("languages", languageRepository.findAll());
+        map.addAttribute("companies", companyService.findAll());
+        map.addAttribute("languages", languageService.findAll());
         return "saveEmployee";
     }
 
     @GetMapping("/employees/{id}")
     public String singleEmployee(ModelMap map, @PathVariable int id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);
+        Employee employee = employeeService.getById(id);
 
         map.addAttribute("employee", employee);
-        map.addAttribute("languages", languageRepository.findAll());
+        map.addAttribute("languages", languageService.findAll());
         return "singleEmployee";
     }
 
     @PostMapping("/employees/add")
     public String addEmployee(@ModelAttribute CreateEmployeeRequest createEmployeeRequest,
                               @RequestParam("pictures") MultipartFile[] uploadedFiles) throws IOException {
-        List<Language>languages = new ArrayList<>();
-        for (Integer language : createEmployeeRequest.getLanguages()) {
-            languages.add(languageRepository.getById(language));
-        }
-        Employee employee = Employee.builder()
-                .id(createEmployeeRequest.getId())
-                .name(createEmployeeRequest.getName())
-                .surname(createEmployeeRequest.getSurname())
-                .email(createEmployeeRequest.getEmail())
-                .phone(createEmployeeRequest.getPhone())
-                .salary(createEmployeeRequest.getSalary())
-                .position(createEmployeeRequest.getPosition())
-                .company(companyRepository.findById(createEmployeeRequest.getCompanyId()).orElse(null))
-                .languages(languages)
-                .build();
-        employeeRepository.save(employee);
-        if (uploadedFiles.length != 0) {
-            for (MultipartFile uploadedFile : uploadedFiles) {
-                String fileName = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
-                File newFile = new File(imgPath + fileName);
-                uploadedFile.transferTo(newFile);
-                EmployeeImage employeeImage = EmployeeImage.builder()
-                        .name(fileName)
-                        .employee(employee)
-                        .build();
-                employeeImageRepository.save(employeeImage);
-            }
+        employeeService.addEmployeeFromEmployeeRequest(createEmployeeRequest, uploadedFiles);
 
-        }
         return "redirect:/employees";
     }
 
