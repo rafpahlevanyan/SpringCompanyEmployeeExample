@@ -29,6 +29,7 @@ public class Employee {
     private Company company;
     @OneToMany(mappedBy = "employee")
     private List<EmployeeImage> employeeImages;
+
     @ManyToMany
     @JoinTable(
             name = "employee_languages",

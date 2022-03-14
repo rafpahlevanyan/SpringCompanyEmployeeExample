@@ -13,15 +13,17 @@ import javax.persistence.*;
 @Builder
 @Data
 @Entity
-@Table(name = "company")
+@Table(name = "user")
 
-public class Company {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private int size;
-    private String address;
-    @ManyToOne
-    private User user;
+    private String surname;
+    private String userEmail;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
 }

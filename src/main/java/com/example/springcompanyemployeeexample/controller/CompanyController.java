@@ -1,9 +1,13 @@
 package com.example.springcompanyemployeeexample.controller;
 
+import com.example.springcompanyemployeeexample.dto.CreateCompanyRequest;
 import com.example.springcompanyemployeeexample.entity.Company;
+import com.example.springcompanyemployeeexample.entity.User;
+import com.example.springcompanyemployeeexample.security.CurrentUser;
 import com.example.springcompanyemployeeexample.service.CompanyService;
 import com.example.springcompanyemployeeexample.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +28,12 @@ public class CompanyController {
 
 
     @GetMapping("/companies")
-    public String employeePage(ModelMap map) {
+    public String employeePage(@AuthenticationPrincipal CurrentUser currentUser, ModelMap map) {
         List<Company> companies = companyService.findAll();
         map.addAttribute("companies", companies);
+        if (currentUser != null){
+            map.addAttribute("user", currentUser.getUser());
+        }
         return "companies";
     }
 
@@ -36,8 +43,9 @@ public class CompanyController {
     }
 
     @PostMapping("/addCompany")
-    public String addCompany(@ModelAttribute Company company) {
-        companyService.save(company);
+    public String addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest,@AuthenticationPrincipal CurrentUser currentUser) {
+
+        companyService.addCompanyFromCompanyRequest(createCompanyRequest,currentUser.getUser());
         return "redirect:/companies";
     }
 
@@ -47,6 +55,14 @@ public class CompanyController {
         employeeService.deleteEmployeeByCompany(company);
         companyService.deleteById(id);
         return "redirect:/companies";
+    }
+
+    @GetMapping("/myCompanies")
+    public String companiesByCurrentUserPage(ModelMap map, @AuthenticationPrincipal CurrentUser currentUser) {
+        User user = currentUser.getUser();
+        List<Company> companies = companyService.findAllByUser(user);
+        map.addAttribute("companies", companies);
+        return "companies";
     }
 
 

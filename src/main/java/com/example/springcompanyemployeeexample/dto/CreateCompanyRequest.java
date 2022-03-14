@@ -1,6 +1,7 @@
-package com.example.springcompanyemployeeexample.entity;
+package com.example.springcompanyemployeeexample.dto;
 
 
+import com.example.springcompanyemployeeexample.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,18 +11,12 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-@Entity
-@Table(name = "company")
 
-public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CreateCompanyRequest {
     private int id;
     private String name;
     private int size;
     private String address;
-    @ManyToOne
-    private User user;
+
 }
