@@ -25,7 +25,7 @@
         <th>Name</th>
         <th>Size</th>
         <th>Address</th>
-        <th th:if="${user.userRole.equals(ADMIN)}">Action</th>
+        <th th:if="${user.userRole.name()=='ADMIN'}">Action</th>
     </tr>
 
     <tr th:each="company: ${companies}">
@@ -36,7 +36,7 @@
         <td th:text="${company.size}"></td>
         <td th:text="${company.address}"></td>
         <td><a th:href="@{'/employees/byCompanies/' + ${company.id}}">View Employees | </a></td>
-        <td th:if="${user.userRole.equals(ADMIN)}" ><a th:href="@{'/deleteCompany/' + ${company.id}}">delete Company </a></td>
+        <td th:if="${user.userRole.name()=='ADMIN'}" ><a th:href="@{'/deleteCompany/' + ${company.id}}">delete Company </a></td>
     </tr>
 </table>
 <a href="/addCompany">Add Company</a><br>

@@ -25,7 +25,7 @@
         <td th:text="${u.surname}"></td>
         <td th:text="${u.userEmail}"></td>
         <td><a th:href="@{'/companies/byUsers/' + ${u.id}}">View Companies | </a></td>
-        <td th:if="${user != null}"><a th:href="@{'/deleteUser/' + ${u.id}}">delete User </a></td>
+        <td th:if="${user.userRole.name()=='ADMIN'}"><a th:href="@{'/deleteUser/' + ${u.id}}">delete User </a></td>
     </tr>
 </table>
 <a href="/addUser">Add User</a><br>
