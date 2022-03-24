@@ -58,7 +58,7 @@ public class UserController {
 //            return "saveUser";
 //        }
         userService.addUserFromUserRequest(createUserRequest);
-        mailService.sendMail(user.getUserEmail(), "Welcome", "You are registered" + user.getName());
+        mailService.sendMail(user.getUserEmail(), "Welcome", "You are registered " + user.getName());
         return "redirect:/users";
     }
 
