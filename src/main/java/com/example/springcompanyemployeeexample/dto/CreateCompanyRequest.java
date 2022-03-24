@@ -1,13 +1,9 @@
 package com.example.springcompanyemployeeexample.dto;
 
 
-import com.example.springcompanyemployeeexample.entity.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor

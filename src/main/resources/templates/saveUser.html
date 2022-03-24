@@ -6,6 +6,12 @@
 </head>
 <body>
 
+<div th:if="${errors != null && !errors.isEmpty()}">
+    <ul>
+        <li style="color: red" th:each="error: ${errors}" th:text="${error}"></li>
+    </ul>
+</div>
+
 Register
 <form action="/addUser" method="post">
 

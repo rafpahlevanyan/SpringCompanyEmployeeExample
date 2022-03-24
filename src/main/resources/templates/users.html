@@ -6,8 +6,13 @@
     <title>Users</title>
 </head>
 <body>
+<td>
+
 
 <a href="/">Home Page</a>
+
+<div th:include="fragment/userFragment:: login"></div>
+
 <table>
     <tr>
         <th>Id</th>
@@ -25,10 +30,10 @@
         <td th:text="${u.surname}"></td>
         <td th:text="${u.userEmail}"></td>
         <td><a th:href="@{'/companies/byUsers/' + ${u.id}}">View Companies | </a></td>
-        <td th:if="${user.userRole.name()=='ADMIN'}"><a th:href="@{'/deleteUser/' + ${u.id}}">delete User </a></td>
+        <td th:if="${user != null && user.userRole.name()=='ADMIN'}"><a th:href="@{'/deleteUser/' + ${u.id}}">delete User </a></td>
     </tr>
 </table>
-<a href="/addUser">Add User</a><br>
+<!--<td th:if="${user==null}"></td> <a href="/addUser">Add User</a></td><br>-->
 
 </body>
 </html>

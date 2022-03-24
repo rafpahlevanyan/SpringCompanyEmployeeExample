@@ -1,6 +1,5 @@
 package com.example.springcompanyemployeeexample.service;
 
-import com.example.springcompanyemployeeexample.dto.CreateEmployeeRequest;
 import com.example.springcompanyemployeeexample.entity.Company;
 import com.example.springcompanyemployeeexample.entity.Employee;
 import com.example.springcompanyemployeeexample.entity.EmployeeImage;
@@ -28,7 +27,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final LanguageRepository languageRepository;
     private final EmployeeImageRepository employeeImageRepository;
-    private final CompanyRepository companyRepository;
+
     public List<Employee> deleteEmployeeByCompany(Company company) {
         return employeeRepository.deleteEmployeeByCompany(company);
     }
@@ -43,57 +42,48 @@ public class EmployeeService {
     }
 
     public Employee getById(int id) {
-       return employeeRepository.getById(id);
+        return employeeRepository.getById(id);
     }
 
-    public Employee save(Employee employee) {
-        return employeeRepository.save(employee);
-    }
 
-    public Employee addEmployeeFromEmployeeRequest(CreateEmployeeRequest createEmployeeRequest, MultipartFile[] uploadedFiles) throws IOException {
-        List<Language> languages = getLanguagesFromRequest(createEmployeeRequest);
-        Employee employee = getEmployeeFromRequest(createEmployeeRequest, languages);
+
+    public Employee addEmployee(Employee employee, MultipartFile[] uploadedFiles, List<Integer> languages) throws IOException {
+        List<Language> languagesFromDB = getLanguagesFromRequest(languages);
+        employee.setLanguages(languagesFromDB);
         employeeRepository.save(employee);
         saveEmployeeImages(uploadedFiles, employee);
         return employee;
     }
 
-    private Employee getEmployeeFromRequest(CreateEmployeeRequest createEmployeeRequest, List<Language> languages) {
-        return Employee.builder()
-                .id(createEmployeeRequest.getId())
-                .name(createEmployeeRequest.getName())
-                .surname(createEmployeeRequest.getSurname())
-                .email(createEmployeeRequest.getEmail())
-                .phone(createEmployeeRequest.getPhone())
-                .salary(createEmployeeRequest.getSalary())
-                .position(createEmployeeRequest.getPosition())
-                .company(companyRepository.findById(createEmployeeRequest.getCompanyId()).orElse(null))
-                .languages(languages)
-                .build();
-    }
 
     private void saveEmployeeImages(MultipartFile[] uploadedFiles, Employee employee) throws IOException {
-        if (uploadedFiles.length != 0) {
-            for (MultipartFile uploadedFile : uploadedFiles) {
-                String fileName = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
-                File newFile = new File(imgPath + fileName);
-                uploadedFile.transferTo(newFile);
-                EmployeeImage employeeImage = EmployeeImage.builder()
-                        .name(fileName)
-                        .employee(employee)
-                        .build();
-                employeeImageRepository.save(employeeImage);
-            }
 
+        if (uploadedFiles.length != 0) {
+
+            for (MultipartFile uploadedFile : uploadedFiles) {
+                if (!uploadedFile.getOriginalFilename().equals("")) {
+                    String fileName = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
+
+                    File newFile = new File(imgPath + fileName);
+                    uploadedFile.transferTo(newFile);
+                    EmployeeImage employeeImage = EmployeeImage.builder()
+                            .name(fileName)
+                            .employee(employee)
+                            .build();
+                    employeeImageRepository.save(employeeImage);
+                }
+            }
         }
     }
 
-    private List<Language> getLanguagesFromRequest(CreateEmployeeRequest createEmployeeRequest) {
-        List<Language>languages = new ArrayList<>();
-        for (Integer language : createEmployeeRequest.getLanguages()) {
+
+    private List<Language> getLanguagesFromRequest(List<Integer> languagesIds) {
+        List<Language> languages = new ArrayList<>();
+        for (Integer language : languagesIds) {
             languages.add(languageRepository.getById(language));
         }
         return languages;
     }
+
 
 }

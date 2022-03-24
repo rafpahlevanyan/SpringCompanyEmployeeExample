@@ -10,13 +10,7 @@
 <a href="/">Home Page</a>
 <br>
 
-<div th:if="${user == null}">
-    <a href="/login">LOgin</a>
-</div>
-<div th:if="${user != null}">
-    Welcome, <span th:text="${user.name}"></span> | <a href="/myCompanies">MyCompanies</a>
-    <a href="/logout">Logout</a>
-</div>
+<div th:include="fragment/userFragment:: login"></div>
 
 
 <table>
@@ -25,7 +19,7 @@
         <th>Name</th>
         <th>Size</th>
         <th>Address</th>
-        <th th:if="${user.userRole.name()=='ADMIN'}">Action</th>
+        <th>Action</th>
     </tr>
 
     <tr th:each="company: ${companies}">
@@ -36,8 +30,12 @@
         <td th:text="${company.size}"></td>
         <td th:text="${company.address}"></td>
         <td><a th:href="@{'/employees/byCompanies/' + ${company.id}}">View Employees | </a></td>
-        <td th:if="${user.userRole.name()=='ADMIN'}" ><a th:href="@{'/deleteCompany/' + ${company.id}}">delete Company </a></td>
+
+        <td th:if="${user.userRole.name()=='ADMIN'}"><a th:href="@{'/deleteCompany/' + ${company.id}}">delete
+            Company </a></td>
+
     </tr>
+
 </table>
 <a href="/addCompany">Add Company</a><br>
 

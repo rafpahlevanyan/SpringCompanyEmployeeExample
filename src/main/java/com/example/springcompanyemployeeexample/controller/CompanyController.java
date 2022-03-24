@@ -28,12 +28,10 @@ public class CompanyController {
 
 
     @GetMapping("/companies")
-    public String employeePage(@AuthenticationPrincipal CurrentUser currentUser, ModelMap map) {
+    public String employeePage(ModelMap map) {
         List<Company> companies = companyService.findAll();
         map.addAttribute("companies", companies);
-        if (currentUser != null){
-            map.addAttribute("user", currentUser.getUser());
-        }
+
         return "companies";
     }
 

@@ -4,7 +4,6 @@ import com.example.springcompanyemployeeexample.dto.CreateCompanyRequest;
 import com.example.springcompanyemployeeexample.entity.Company;
 import com.example.springcompanyemployeeexample.entity.User;
 import com.example.springcompanyemployeeexample.repository.CompanyRepository;
-import com.example.springcompanyemployeeexample.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +14,9 @@ import java.util.List;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final UserRepository userRepository;
 
 
-//    public Company save(Company company) {
-//        return companyRepository.save(company);
-//    }
-    public Company addCompanyFromCompanyRequest(CreateCompanyRequest createCompanyRequest,User user){
+    public Company addCompanyFromCompanyRequest(CreateCompanyRequest createCompanyRequest, User user) {
         Company company = getCompanyFromRequest(createCompanyRequest);
         company.setUser(user);
         companyRepository.save(company);
@@ -51,8 +46,8 @@ public class CompanyService {
         return companyRepository.findAllByUser(user);
     }
 
-    private Company getCompanyFromRequest(CreateCompanyRequest createCompanyRequest){
-        return  Company.builder()
+    private Company getCompanyFromRequest(CreateCompanyRequest createCompanyRequest) {
+        return Company.builder()
                 .id(createCompanyRequest.getId())
                 .name(createCompanyRequest.getName())
                 .size(createCompanyRequest.getSize())

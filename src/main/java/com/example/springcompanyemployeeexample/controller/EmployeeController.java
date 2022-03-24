@@ -8,6 +8,7 @@ import com.example.springcompanyemployeeexample.service.EmployeeService;
 import com.example.springcompanyemployeeexample.service.LanguageService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeController {
 
+    private final ModelMapper mapper;
     private final EmployeeService employeeService;
     private final CompanyService companyService;
     private final LanguageService languageService;
@@ -72,8 +74,10 @@ public class EmployeeController {
 
     @PostMapping("/employees/add")
     public String addEmployee(@ModelAttribute CreateEmployeeRequest createEmployeeRequest,
-                              @RequestParam("pictures") MultipartFile[] uploadedFiles) throws IOException {
-        employeeService.addEmployeeFromEmployeeRequest(createEmployeeRequest, uploadedFiles);
+                              @RequestParam("pictures") MultipartFile[] uploadedFiles
+    ) throws IOException {
+        Employee employee = mapper.map(createEmployeeRequest, Employee.class);
+        employeeService.addEmployee(employee, uploadedFiles, createEmployeeRequest.getLanguages());
 
         return "redirect:/employees";
     }
