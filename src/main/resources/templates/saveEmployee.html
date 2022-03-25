@@ -6,6 +6,11 @@
 </head>
 <body>
 
+<div th:if="${errors != null && !errors.isEmpty()} ">
+  <ul>
+    <li style="color: red" th:each="error: ${errors}" th:text="${error}"></li>
+  </ul>
+</div>
 
 <form action="/employees/add" method="post" enctype="multipart/form-data">
 
@@ -15,7 +20,7 @@
   surname:<input type="text" name="surname" th:value="${employee== null} ? '' : ${employee.surname} " placeholder="surname"/><br>
   email:<input type="email" name="email" th:value="${employee== null} ? '' : ${employee.email} " placeholder="email"/><br>
   phone:<input type="text" name="phone" th:value="${employee== null} ? '' : ${employee.phone} " placeholder="phone"/><br>
-  salary:<input type="text" name="salary" th:value="${employee== null} ? '' : ${employee.salary} " placeholder="salary"/><br>
+  salary:<input type="number" name="salary" th:value="${employee== null} ? '' : ${employee.salary} " placeholder="salary"/><br>
   position:<input type="text" name="position" th:value="${employee== null} ? '' : ${employee.position} " placeholder="position"/><br>
   Companies:
   <select name="companyId">

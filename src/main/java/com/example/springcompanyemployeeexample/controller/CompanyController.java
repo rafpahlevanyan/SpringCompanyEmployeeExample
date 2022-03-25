@@ -10,11 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -41,10 +45,21 @@ public class CompanyController {
     }
 
     @PostMapping("/addCompany")
-    public String addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest, @AuthenticationPrincipal CurrentUser currentUser) {
-
-        companyService.addCompanyFromCompanyRequest(createCompanyRequest, currentUser.getUser());
-        return "redirect:/companies";
+    public String addCompany(@ModelAttribute @Valid CreateCompanyRequest createCompanyRequest,
+                             BindingResult bindingResult,
+                             @AuthenticationPrincipal CurrentUser currentUser,
+                             ModelMap map) {
+        if (bindingResult.hasErrors()){
+            List<String> errors = new ArrayList<>();
+            for (ObjectError allError : bindingResult.getAllErrors()) {
+                errors.add(allError.getDefaultMessage());
+            }
+            map.addAttribute("errors",errors);
+            return "saveCompany";
+        }else {
+            companyService.addCompanyFromCompanyRequest(createCompanyRequest, currentUser.getUser());
+            return "redirect:/companies";
+        }
     }
 
     @GetMapping("/deleteCompany/{id}")

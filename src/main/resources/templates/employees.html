@@ -17,6 +17,22 @@
         margin: 20px;
         padding: 25px;
     }
+    .pagination{
+        display: inline-block;
+    }
+    .pagination a{
+        color: black;
+        float: left;
+        padding: 5px 5px;
+        text-decoration: none;
+    }
+    .pagination a.active {
+        background-color: grey;
+        color: white;
+        border-radius: 2px;
+    }
+
+
 </style>
 <body>
 
@@ -43,7 +59,7 @@
 
 <!--    <tbody>-->
 
-    <tr th:each="employee: ${employees}">
+    <tr th:each="employee: ${employeePage.content}">
 
         <td th:text="${employee.id}">
         </td>
@@ -69,6 +85,16 @@
 <!--    </tbody>-->
 </table>
 
+<div th:if="${employeePage.totalPages>0}" class="pagination"
+        th:each="pageNumber: ${pageNumbers}">
+    <a th:href="@{/employees(size=${employeePage.size}, page=${pageNumber - 1})}"
+       th:text="${pageNumber}"
+       th:class="${pageNumber==employeePage.number + 1} ? active"></a>
+</div>
+<br>
+<br>
+<br>
+<br>
 <a href="/employees/add">Add Employee</a>
 
 

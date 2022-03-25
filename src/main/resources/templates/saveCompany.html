@@ -6,13 +6,18 @@
 </head>
 <body>
 
+<div th:if="${errors != null && !errors.isEmpty()}">
+    <ul>
+        <li style="color: red" th:each="error: ${errors}" th:text="${error}"></li>
+    </ul>
+</div>
 Add Company
 <form action="/addCompany" method="post">
 
 
     <input th:if="${company != null}" type="hidden" th:value="${company.id}" name="id">
     Name:<input type="text" name="name" th:value="${company == null} ? '' : ${company.name} " placeholder="name"/><br>
-    Size:<input type="text" name="size" th:value="${company == null} ? '' : ${company.size} " placeholder="size"/><br>
+    Size:<input type="number" name="size" th:value="${company == null} ? '' : ${company.size} " placeholder="size"/><br>
     Address:<input type="text" name="address" th:value="${company == null} ? '' : ${company.address} "
                    placeholder="address"/><br>
     <input type="submit" value="Add"><br>

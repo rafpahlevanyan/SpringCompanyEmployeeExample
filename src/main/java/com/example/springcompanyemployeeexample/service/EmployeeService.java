@@ -9,6 +9,8 @@ import com.example.springcompanyemployeeexample.repository.EmployeeRepository;
 import com.example.springcompanyemployeeexample.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,8 +34,9 @@ public class EmployeeService {
     }
 
 
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public Page<Employee> findAll(Pageable pageable) {
+
+        return employeeRepository.findAll(pageable);
     }
 
     public List<Employee> findAllByCompany(Company company) {
