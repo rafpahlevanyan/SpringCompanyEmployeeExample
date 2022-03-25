@@ -41,9 +41,9 @@ public class CompanyController {
     }
 
     @PostMapping("/addCompany")
-    public String addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest,@AuthenticationPrincipal CurrentUser currentUser) {
+    public String addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest, @AuthenticationPrincipal CurrentUser currentUser) {
 
-        companyService.addCompanyFromCompanyRequest(createCompanyRequest,currentUser.getUser());
+        companyService.addCompanyFromCompanyRequest(createCompanyRequest, currentUser.getUser());
         return "redirect:/companies";
     }
 

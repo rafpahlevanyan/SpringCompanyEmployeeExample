@@ -4,7 +4,6 @@ import com.example.springcompanyemployeeexample.entity.Company;
 import com.example.springcompanyemployeeexample.entity.Employee;
 import com.example.springcompanyemployeeexample.entity.EmployeeImage;
 import com.example.springcompanyemployeeexample.entity.Language;
-import com.example.springcompanyemployeeexample.repository.CompanyRepository;
 import com.example.springcompanyemployeeexample.repository.EmployeeImageRepository;
 import com.example.springcompanyemployeeexample.repository.EmployeeRepository;
 import com.example.springcompanyemployeeexample.repository.LanguageRepository;
@@ -44,7 +43,6 @@ public class EmployeeService {
     public Employee getById(int id) {
         return employeeRepository.getById(id);
     }
-
 
 
     public Employee addEmployee(Employee employee, MultipartFile[] uploadedFiles, List<Integer> languages) throws IOException {

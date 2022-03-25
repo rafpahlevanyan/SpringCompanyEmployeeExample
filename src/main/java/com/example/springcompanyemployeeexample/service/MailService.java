@@ -14,7 +14,7 @@ public class MailService {
     private final MailSender mailSender;
 
     @Async
-    public void sendMail(String toEmail,String subject, String message){
+    public void sendMail(String toEmail, String subject, String message) {
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(toEmail);
@@ -22,8 +22,7 @@ public class MailService {
         simpleMailMessage.setText(message);
 
 
-                mailSender.send(simpleMailMessage);
-
+        mailSender.send(simpleMailMessage);
 
 
     }
