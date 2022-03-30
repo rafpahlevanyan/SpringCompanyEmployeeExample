@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +26,8 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+    private String token;
+    private boolean active;
+    private LocalDateTime tokenCreatedDate;
 
 }

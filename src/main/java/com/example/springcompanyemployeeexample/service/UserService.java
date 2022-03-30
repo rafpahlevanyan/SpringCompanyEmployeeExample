@@ -1,6 +1,5 @@
 package com.example.springcompanyemployeeexample.service;
 
-import com.example.springcompanyemployeeexample.dto.CreateUserRequest;
 import com.example.springcompanyemployeeexample.entity.User;
 import com.example.springcompanyemployeeexample.entity.UserRole;
 import com.example.springcompanyemployeeexample.repository.UserRepository;
@@ -9,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,29 +19,13 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-//    public User save(User user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setUserRole(UserRole.USER);
-//        return userRepository.save(user);
-//    }
-
-    public User addUserFromUserRequest(CreateUserRequest createUserRequest) {
-        User user = getUserFromRequest(createUserRequest);
+    public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserRole(UserRole.USER);
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 
-    private User getUserFromRequest(CreateUserRequest createUserRequest) {
-        return User.builder()
-                .id(createUserRequest.getId())
-                .name(createUserRequest.getName())
-                .surname(createUserRequest.getSurname())
-                .userEmail(createUserRequest.getUserEmail())
-                .password(createUserRequest.getPassword())
-                .build();
-    }
+
 
     public void deleteById(int id) {
         userRepository.deleteById(id);
@@ -54,5 +38,9 @@ public class UserService {
 
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public Optional<User> findByToken(String token) {
+        return userRepository.findByToken(token);
     }
 }
