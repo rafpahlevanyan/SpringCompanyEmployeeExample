@@ -70,10 +70,20 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/byCompanies/{id}")
-    public String employeesByCompaniesPage(ModelMap map, @PathVariable("id") int id) {
+    public String employeesByCompaniesPage(ModelMap map, @PathVariable("id") int id,
+                                           @RequestParam(value = "page", defaultValue = "0") int page,
+                                           @RequestParam(value = "size", defaultValue = "3") int size) {
         Company company = companyService.getById(id);
-        List<Employee> employees = employeeService.findAllByCompany(company);
-        map.addAttribute("employees", employees);
+        PageRequest pageRequest = PageRequest.of(page, size , Sort.by("id").descending());
+        Page<Employee> employeePage = employeeService.findAllByCompany(company,pageRequest);
+        map.addAttribute("employeePage", employeePage);
+        int totalPages = employeePage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            map.addAttribute("pageNumbers", pageNumbers);
+        }
         return "employees";
     }
 

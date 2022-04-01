@@ -39,8 +39,8 @@ public class EmployeeService {
         return employeeRepository.findAll(pageable);
     }
 
-    public List<Employee> findAllByCompany(Company company) {
-        return employeeRepository.findAllByCompany(company);
+    public Page<Employee> findAllByCompany(Company company,Pageable pageable) {
+        return employeeRepository.findAllByCompany(company,pageable);
     }
 
     public Employee getById(int id) {
