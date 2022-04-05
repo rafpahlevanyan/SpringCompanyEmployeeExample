@@ -19,10 +19,14 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-    public User save(User user) {
+    public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserRole(UserRole.USER);
         return userRepository.save(user);
+    }
+
+    public void save(User user){
+        userRepository.save(user);
     }
 
 
