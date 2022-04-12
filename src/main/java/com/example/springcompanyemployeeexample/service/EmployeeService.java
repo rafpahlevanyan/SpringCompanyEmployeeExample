@@ -35,7 +35,6 @@ public class EmployeeService {
 
 
     public Page<Employee> findAll(Pageable pageable) {
-
         return employeeRepository.findAll(pageable);
     }
 

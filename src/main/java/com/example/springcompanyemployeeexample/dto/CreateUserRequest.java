@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @NoArgsConstructor
@@ -14,13 +13,13 @@ import javax.validation.constraints.NotEmpty;
 
 public class CreateUserRequest {
     private int id;
-    @NotEmpty
+    @NotEmpty(message = "Name can`t be empty")
     private String name;
-    @NotEmpty
+    @NotEmpty(message = "Surname can`t be empty")
     private String surname;
-    @Email
+    @NotEmpty(message = "Please input valid email address")
     private String userEmail;
-    @NotEmpty
+    @NotEmpty(message = "Password can`t be empty")
     private String password;
 
 

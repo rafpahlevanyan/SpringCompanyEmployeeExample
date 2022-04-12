@@ -3,6 +3,7 @@ package com.example.springcompanyemployeeexample.config;
 import com.example.springcompanyemployeeexample.entity.UserRole;
 import com.example.springcompanyemployeeexample.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,15 +29,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/")
                 .and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
-                .antMatchers(HttpMethod.GET, "/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/activate").permitAll()
-                .antMatchers(HttpMethod.GET, "/addUser").permitAll()
-                .antMatchers(HttpMethod.POST, "/addUser").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//                .antMatchers(HttpMethod.GET, "/").permitAll()
+//                .antMatchers(HttpMethod.GET, "/users").permitAll()
+//                .antMatchers(HttpMethod.GET, "/user/activate").permitAll()
+//                .antMatchers(HttpMethod.GET, "/addUser").permitAll()
+//                .antMatchers(HttpMethod.POST, "/addUser").permitAll()
+//                .antMatchers("/employees").authenticated()
+//                .antMatchers("/employees").hasAnyAuthority(UserRole.ADMIN.name())
                 .antMatchers("/employees/add").hasAnyAuthority(UserRole.USER.name())
                 .antMatchers("/deleteUser/{id}").hasAnyAuthority(UserRole.ADMIN.name())
                 .antMatchers("/deleteCompany/{id}").hasAnyAuthority(UserRole.ADMIN.name())
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
     }
 
     @Override

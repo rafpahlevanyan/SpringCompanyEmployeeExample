@@ -3,29 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Employee</title>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="/js/jquery-3.6.0.js"></script>
+    <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link href="/skitter/skitter.css" type="text/css" media="all" rel="stylesheet" />
+    <script src="/skitter/jquery.easing.1.3.js"></script>
+    <script src="/skitter/jquery.skitter.min.js"></script>
+
 </head>
 <style>
-    *{
-        margin: 0;
-        padding: 0;
-    }
-    tr th{
-        margin: 20px;
-        padding: 20px;
-    }
-    tr td{
-        margin: 20px;
-        padding: 25px;
-    }
-    .pagination{
+    /**{*/
+    /*    margin: 0;*/
+    /*    padding: 0;*/
+    /*}*/
+    /*tr th{*/
+    /*    margin: 20px;*/
+    /*    padding: 20px;*/
+    /*}*/
+    /*tr td{*/
+    /*    margin: 20px;*/
+    /*    padding: 25px;*/
+    /*}*/
+    .pagination {
         display: inline-block;
     }
-    .pagination a{
+
+    .pagination a {
         color: black;
         float: left;
         padding: 5px 5px;
         text-decoration: none;
     }
+
     .pagination a.active {
         background-color: grey;
         color: white;
@@ -40,8 +49,8 @@
 <br>
 <div th:include="fragment/userFragment:: login"></div>
 
-<table>
-<!--    <thead>-->
+<table id="employees" style="width: 50%" class="cell-border">
+    <thead>
     <tr>
         <th>Id</th>
         <th>Name</th>
@@ -53,26 +62,21 @@
         <th>Company</th>
         <th>Language</th>
         <th>ProfPic</th>
+<!--        <th>ProfPic</th>-->
     </tr>
-
-<!--    </thead>-->
-
-<!--    <tbody>-->
-
+    </thead>
+    <tbody>
     <tr th:each="employee: ${employeePage.content}">
-
-        <td th:text="${employee.id}">
-        </td>
-
+        <td th:text="${employee.id}"></td>
         <td><a th:href="@{'/employees/' + ${employee.id}}"><span th:text="${employee.name}"> </span></a></td>
-
         <td th:text="${employee.surname}"></td>
         <td th:text="${employee.email}"></td>
         <td th:text="${employee.phone}"></td>
         <td th:text="${employee.salary}"></td>
         <td th:text="${employee.position}"></td>
         <td th:text="${employee.company.name}"></td>
-        <td style="display: inline-block; width: 10px;margin: 25px;padding: 0" th:each="language: ${employee.languages}" th:text="${language.name}"></td>
+        <td>
+          <span  style="display: inline-block; width: 10px;margin: 15px;padding: 0" th:each="language: ${employee.languages}" th:text="${language.name}"></span></td>
         <td>
             <img th:if="${employee.employeeImages != null && !employee.employeeImages.isEmpty()}"
                  th:src="@{/getImage(picName=${employee.employeeImages.get(0).name})}"
@@ -80,13 +84,12 @@
             <img th:if="${employee.employeeImages  == null || employee.employeeImages.isEmpty()}"
                  src="/pic/image-not-found.jpg" width="80px">
         </td>
-
     </tr>
-<!--    </tbody>-->
+    </tbody>
 </table>
 
 <div th:if="${employeePage.totalPages>0}" class="pagination"
-        th:each="pageNumber: ${pageNumbers}">
+     th:each="pageNumber: ${pageNumbers}">
     <a th:href="@{/employees(size=${employeePage.size}, page=${pageNumber - 1})}"
        th:text="${pageNumber}"
        th:class="${pageNumber==employeePage.number + 1} ? active"></a>
@@ -95,8 +98,16 @@
 <br>
 <br>
 <br>
-<a href="/employees/add">Add Employee</a>
 
+<script>
+    $(document).ready(function () {
+        $('#employees').DataTable({
+            "paging": false
+        })
+    });
+</script>
+
+<a href="/employees/add">Add Employee</a>
 
 </body>
 </html>

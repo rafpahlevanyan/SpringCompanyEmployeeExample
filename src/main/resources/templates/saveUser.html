@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <script src="/js/jquery-3.6.0.js"></script>
 </head>
+
 <body>
 
 <div th:if="${errors != null && !errors.isEmpty()}">
@@ -12,22 +14,47 @@
     </ul>
 </div>
 
+<div id="formValidateErrors" style="color: red">
+
+</div>
+
 Register
 <form action="/addUser" method="post">
 
 
     <input th:if="${user != null}" type="hidden" th:value="${user.id}" name="id">
-    Name:<input type="text" name="name" th:value="${user == null} ? '' : ${user.name} " placeholder="name"/><br>
-    Surname:<input type="text" name="surname" th:value="${user == null} ? '' : ${user.surname} "
+    Name:<input id="userName" type="text" name="name" th:value="${user == null} ? '' : ${user.name} "
+                placeholder="name"/><br>
+    Surname:<input id="surname" type="text" name="surname" th:value="${user == null} ? '' : ${user.surname} "
                    placeholder="surname"/><br>
     Email:<input type="email" name="userEmail" th:value="${user == null} ? '' : ${user.userEmail} "
                  placeholder="email"/><br>
     Password:<input type="password" name="password" th:value="${user==null} ? ' ' : ${user.password}"
                     placeholder="password"><br>
-    <input type="submit" value="Add"><br>
+    <input type="submit" value="Add" id="userAddForm"><br>
 
 
 </form>
+
+<script>
+    $(document).ready(function (e) {
+        $('#userAddForm').on('click', function (event) {
+            let name = $("#userName").val();
+            let surname = $("#surname").val();
+            if (name == null || name === '' || surname == null || surname === '') {
+                event.preventDefault();
+                $('#formValidateErrors').html("<span>User name or surname can`t be null or empty</span><br>")
+            }
+        })
+        // $('#userAddForm').on('click', function (event) {
+        //     let surname = $("#surname").val();
+        //     if (surname == null || surname === '') {
+        //         event.preventDefault();
+        //         $('#formValidateErrors').html("<span>User surname can`t be null or empty</span><br>")
+        //     }
+        // })
+    })
+</script>
 
 </body>
 </html>

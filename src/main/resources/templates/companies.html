@@ -31,7 +31,7 @@
         <td th:text="${company.address}"></td>
         <td><a th:href="@{'/employees/byCompanies/' + ${company.id}}">View Employees | </a></td>
 
-        <td th:if="${user.userRole.name()=='ADMIN'}"><a th:href="@{'/deleteCompany/' + ${company.id}}">delete
+        <td th:if="${user != null &&user.userRole.name()=='ADMIN'}"><a th:href="@{'/deleteCompany/' + ${company.id}}">delete
             Company </a></td>
 
     </tr>
